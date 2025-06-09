@@ -1,5 +1,5 @@
 {
-  "name": "agd-feed-be",
+  "name": "agd-feed-be-service",
   "version": "1.0.0",
   "description": "聚合信息流后端 API (Fastify + MongoDB)",
   "main": "src/server.js",

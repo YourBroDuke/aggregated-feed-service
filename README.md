@@ -7,18 +7,41 @@
 - Fastify (Node.js Web 框架)
 - MongoDB (单一数据源)
 
-## 环境配置
-1. 安装依赖：
-   ```bash
-   npm install
-   ```
-2. 配置 MongoDB 连接：
-   - 复制 `.env` 文件，设置 `MONGODB_URI` 为你的 MongoDB 实例地址。
+## 环境配置与启动指南
 
-## 启动服务
+### 1. 克隆项目
+
 ```bash
-npm run dev
+git clone <你的仓库地址>
+cd aggregated-feed-service
 ```
+
+### 2. 安装依赖
+
+请确保你已安装 [pnpm](https://pnpm.io/zh/installation) 和 Node.js (建议版本 18+)。
+
+```bash
+pnpm install --reporter=default
+```
+
+### 3. 配置环境变量
+
+1. 复制 `.env.example` 文件为 `.env`（如无 `.env.example`，请直接新建 `.env` 文件）：
+   ```bash
+   cp .env.example .env
+   ```
+2. 编辑 `.env` 文件，设置你的 MongoDB 连接字符串，例如：
+   ```
+   DATABSE_URL=mongodb://localhost:27017/aggregated-feed
+   ```
+
+### 4. 启动开发服务器
+
+```bash
+pnpm run dev
+```
+
+服务器启动后，默认监听端口请参考 `.env` 或 `src/config` 配置。
 
 ## API 说明
 详见 [API_SPEC.md](./API_SPEC.md)
