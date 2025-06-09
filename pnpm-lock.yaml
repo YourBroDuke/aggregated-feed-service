@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@fastify/cors':
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: ^10.1.0
+        version: 10.1.0
       '@prisma/client':
         specifier: 6.9.0
         version: 6.9.0(prisma@6.9.0(typescript@5.8.3))(typescript@5.8.3)
@@ -49,8 +49,8 @@ packages:
   '@fastify/ajv-compiler@4.0.2':
     resolution: {integrity: sha512-Rkiu/8wIjpsf46Rr+Fitd3HRP+VsxUFDDeag0hs9L0ksfnwx2g7SPQQTFL0E8Qv+rfXzQOxBJnjUB9ITUDjfWQ==}
 
-  '@fastify/cors@7.0.0':
-    resolution: {integrity: sha512-nlo6ScwagBNJacAZD3KX90xjWLIoV0vN9QqoX1wUE9ZeZMdvkVkMZCGlxEtr00NshV0X5wDge4w5rwox7rRzSg==}
+  '@fastify/cors@10.1.0':
+    resolution: {integrity: sha512-MZyBCBJtII60CU9Xme/iE4aEy8G7QpzGR8zkdXZkDFt7ElEMachbE61tfhAG/bvSaULlqlf0huMT12T7iqEmdQ==}
 
   '@fastify/error@4.2.0':
     resolution: {integrity: sha512-RSo3sVDXfHskiBZKBPRgnQTtIqpi/7zhJOEmAxCiBcM7d0uwdGdxLlsCaLzGs8v8NnxIRlfG0N51p5yFaOentQ==}
@@ -138,8 +138,8 @@ packages:
     resolution: {integrity: sha512-ueEepnujpqee2o5aIYnvHU6C0A42MNdsIDeqy5BydrkuC5R1ZuUFnm27EeFJGoEHJQgn3uleRvmTXaJgfXbt4g==}
     engines: {node: '>=0.4.0'}
 
-  acorn@8.14.1:
-    resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
+  acorn@8.15.0:
+    resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -206,9 +206,6 @@ packages:
   fast-uri@3.0.6:
     resolution: {integrity: sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==}
 
-  fastify-plugin@3.0.1:
-    resolution: {integrity: sha512-qKcDXmuZadJqdTm6vlCqioEbyewF60b/0LOFCcYN1B6BIZGlYJumWWOYs70SFYLDAH4YqdE1cxH/RKMG7rFxgA==}
-
   fastify-plugin@5.0.1:
     resolution: {integrity: sha512-HCxs+YnRaWzCl+cWRYFnHmeRFyR5GVnJTAaCJQiYzQSDwK9MgJdyAsuL3nh0EWRCYMgQ5MeziymvmAhUHYHDUQ==}
 
@@ -245,6 +242,9 @@ packages:
   memory-pager@1.5.0:
     resolution: {integrity: sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==}
 
+  mnemonist@0.40.0:
+    resolution: {integrity: sha512-kdd8AFNig2AD5Rkih7EPCXhu/iMvwevQFX/uEiGhZyPZi7fHqOoF4V4kHLpCfysxXMgQ4B52kdPMCwARshKvEg==}
+
   mongodb-connection-string-url@3.0.2:
     resolution: {integrity: sha512-rMO7CGo/9BFwyZABcKAWL8UJwH/Kc2x0g72uhDWzG48URRax5TCIcJ7Rc3RZqffZzO/Gwff/jyKwCU9TN8gehA==}
 
@@ -274,6 +274,9 @@ packages:
         optional: true
       socks:
         optional: true
+
+  obliterator@2.0.5:
+    resolution: {integrity: sha512-42CPE9AhahZRsMNslczq0ctAEtqk8Eka26QofnqC346BZdHDySk3LWka23LI7ULIw11NmltpiLagIq8gBozxTw==}
 
   on-exit-leak-free@2.1.2:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
@@ -395,10 +398,6 @@ packages:
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
-  vary@1.1.2:
-    resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
-    engines: {node: '>= 0.8'}
-
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
     engines: {node: '>=12'}
@@ -423,10 +422,10 @@ snapshots:
       ajv-formats: 3.0.1(ajv@8.17.1)
       fast-uri: 3.0.6
 
-  '@fastify/cors@7.0.0':
+  '@fastify/cors@10.1.0':
     dependencies:
-      fastify-plugin: 3.0.1
-      vary: 1.1.2
+      fastify-plugin: 5.0.1
+      mnemonist: 0.40.0
 
   '@fastify/error@4.2.0': {}
 
@@ -510,9 +509,9 @@ snapshots:
 
   acorn-walk@8.3.4:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
 
-  acorn@8.14.1: {}
+  acorn@8.15.0: {}
 
   ajv-formats@3.0.1(ajv@8.17.1):
     optionalDependencies:
@@ -567,8 +566,6 @@ snapshots:
 
   fast-uri@3.0.6: {}
 
-  fastify-plugin@3.0.1: {}
-
   fastify-plugin@5.0.1: {}
 
   fastify@5.3.3:
@@ -619,6 +616,10 @@ snapshots:
 
   memory-pager@1.5.0: {}
 
+  mnemonist@0.40.0:
+    dependencies:
+      obliterator: 2.0.5
+
   mongodb-connection-string-url@3.0.2:
     dependencies:
       '@types/whatwg-url': 11.0.5
@@ -629,6 +630,8 @@ snapshots:
       '@mongodb-js/saslprep': 1.2.2
       bson: 6.10.4
       mongodb-connection-string-url: 3.0.2
+
+  obliterator@2.0.5: {}
 
   on-exit-leak-free@2.1.2: {}
 
@@ -717,7 +720,7 @@ snapshots:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
       '@types/node': 22.15.30
-      acorn: 8.14.1
+      acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
       create-require: 1.1.1
@@ -732,8 +735,6 @@ snapshots:
   undici-types@6.21.0: {}
 
   v8-compile-cache-lib@3.0.1: {}
-
-  vary@1.1.2: {}
 
   webidl-conversions@7.0.0: {}
 

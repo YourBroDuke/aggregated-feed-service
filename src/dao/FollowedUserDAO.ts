@@ -1,4 +1,4 @@
-import { FollowedUserDTO } from '../dto/FollowedUserDTO';
+import { FollowedUserDTO } from '../dto/FollowedUserDTO.js';
 
 export interface FollowedUserDAO {
   getFollowedUsers(): Promise<FollowedUserDTO[]>;

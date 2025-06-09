@@ -1,6 +1,6 @@
-import { FollowedUserDAO } from './FollowedUserDAO';
-import prisma from '../utils/prisma';
-import { FollowedUserDTO } from '../interfaces/user.interface';
+import { FollowedUserDAO } from './FollowedUserDAO.js';
+import prisma from '../utils/prisma.js';
+import { FollowedUserDTO } from '../dto/FollowedUserDTO.js';
 
 export class FollowedUserDAOImpl implements FollowedUserDAO {
   async getFollowedUsers(): Promise<FollowedUserDTO[]> {

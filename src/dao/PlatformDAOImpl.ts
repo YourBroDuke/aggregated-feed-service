@@ -1,6 +1,6 @@
-import { PlatformDAO } from './PlatformDAO';
-import prisma from '../utils/prisma';
-import { PlatformDTO } from '../dto/PlatformDTO';
+import { PlatformDAO } from './PlatformDAO.js';
+import prisma from '../utils/prisma.js';
+import { PlatformDTO } from '../dto/PlatformDTO.js';
 
 export class PlatformDAOImpl implements PlatformDAO {
   async getPlatforms(): Promise<PlatformDTO[]> {

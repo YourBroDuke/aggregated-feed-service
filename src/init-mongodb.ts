@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 async function collectionExists(db: any, name: string): Promise<boolean> {
   const collections = await db.listCollections({ name }).toArray();
@@ -6,12 +6,21 @@ async function collectionExists(db: any, name: string): Promise<boolean> {
 }
 
 export async function initMongoDB() {
+  console.log(process.env.MONGODB_URI);
   const uri = process.env.MONGODB_URI as string;
   if (!uri) {
     throw new Error('请在环境变量中设置MONGODB_URI');
   }
-  const client = new MongoClient(uri, { useUnifiedTopology: true } as any);
+  const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    },
+  });
+  console.log("start connect");
   await client.connect();
+  console.log("connect success");
   const db = client.db();
 
   // FeedItem 示例
@@ -19,7 +28,6 @@ export async function initMongoDB() {
     const feedItems = db.collection('feedItems');
     await feedItems.createIndex({ id: 1 }, { unique: true });
     await feedItems.insertOne({
-      id: 'feeditem_1',
       title: '示例动态',
       platform: 'twitter',
       author: {
@@ -46,7 +54,6 @@ export async function initMongoDB() {
     const followedUsers = db.collection('followedUsers');
     await followedUsers.createIndex({ id: 1 }, { unique: true });
     await followedUsers.insertOne({
-      id: 'user_1',
       platform: 'twitter',
       username: 'zhangsan',
       name: '张三',
@@ -66,7 +73,6 @@ export async function initMongoDB() {
     const platforms = db.collection('platforms');
     await platforms.createIndex({ id: 1 }, { unique: true });
     await platforms.insertOne({
-      id: 'twitter',
       name: 'Twitter',
       icon: 'twitter-icon',
       color: '#1da1f2',

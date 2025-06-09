@@ -2,10 +2,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 import Fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
-import platformsRoutes from './domains/platform/platform.routes';
-import feedRoutes from './domains/feed/feed.routes';
-import followedUsersRoutes from './domains/user/user.routes';
-import { initMongoDB } from './init-mongodb';
+import platformsRoutes from './domains/platform/platform.routes.js';
+import feedRoutes from './domains/feed/feed.routes.js';
+import followedUsersRoutes from './domains/user/user.routes.js';
+import { initMongoDB } from './init-mongodb.js';
 
 const fastify = Fastify({ logger: true });
 
@@ -26,7 +26,7 @@ const start = async () => {
   }
 };
 
-initMongoDB().catch(err => {
+await initMongoDB().catch(err => {
   console.error('初始化失败:', err);
   process.exit(1);
 });

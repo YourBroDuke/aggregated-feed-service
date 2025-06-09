@@ -1,5 +1,5 @@
-import { PlatformDAO } from '../../dao/PlatformDAO';
-import { PlatformDTO } from '../../interfaces/platform.interface';
+import { PlatformDAO } from '../../dao/PlatformDAO.js';
+import { PlatformDTO } from '../../dto/PlatformDTO.js';
 
 export class PlatformService {
   private platformDAO: PlatformDAO;

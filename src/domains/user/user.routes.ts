@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { FollowedUserDAOImpl } from '../../dao/FollowedUserDAOImpl';
+import { FollowedUserDAOImpl } from '../../dao/FollowedUserDAOImpl.js';
 
 export default async function routes(fastify: FastifyInstance, options: any) {
   const followedUserDAO = new FollowedUserDAOImpl();

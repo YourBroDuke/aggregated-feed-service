@@ -1,4 +1,4 @@
-import { FeedItemDTO } from '../dto/FeedItemDTO';
+import { FeedItemDTO } from '../dto/FeedItemDTO.js';
 
 export interface FeedItemDAO {
   getFeedItems(params: {

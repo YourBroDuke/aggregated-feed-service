@@ -1,5 +1,5 @@
-import { FeedItemDAO } from '../../dao/FeedItemDAO';
-import { FeedItemDTO } from '../../interfaces/feed.interface';
+import { FeedItemDAO } from '../../dao/FeedItemDAO.js';
+import { FeedItemDTO } from '../../dto/FeedItemDTO.js';
 import { Prisma } from '@prisma/client';
 
 export class FeedService {

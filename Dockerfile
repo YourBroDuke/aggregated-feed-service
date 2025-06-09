@@ -5,19 +5,20 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # 复制依赖文件
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json prisma/ ./
 
 # 安装 pnpm
-RUN npm install -g pnpm@8.15.5 --registry=https://registry.npmmirror.com
+RUN npm install -g pnpm@10.12.1 --registry=https://registry.npmmirror.com
 
 # 安装依赖
 RUN pnpm install --frozen-lockfile --reporter=default
 
 # 复制源代码
-COPY . .
+COPY src/ ./src/
+COPY .env ./
 
 # 构建 TypeScript
-RUN pnpm run build
+RUN pnpm build
 
 # 生产镜像
 FROM node:20-alpine AS runner

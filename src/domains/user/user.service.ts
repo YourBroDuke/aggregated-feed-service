@@ -1,5 +1,5 @@
-import { FollowedUserDAO } from '../../dao/FollowedUserDAO';
-import { FollowedUserDTO } from '../../dto/FollowedUserDTO';
+import { FollowedUserDAO } from '../../dao/FollowedUserDAO.js';
+import { FollowedUserDTO } from '../../dto/FollowedUserDTO.js';
 
 export class UserService {
   private followedUserDAO: FollowedUserDAO;

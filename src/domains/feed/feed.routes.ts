@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
-import { FeedItemDAOImpl } from '../../dao/FeedItemDAOImpl';
-import { FeedItemDTO } from '../../dto/FeedItemDTO';
-import { FeedService } from './feed.service';
+import { FeedItemDAOImpl } from '../../dao/FeedItemDAOImpl.js';
+import { FeedItemDTO } from '../../dto/FeedItemDTO.js';
+import { FeedService } from './feed.service.js';
 
 export default async function routes(fastify: FastifyInstance, options: any) {
   const feedItemDAO = new FeedItemDAOImpl();

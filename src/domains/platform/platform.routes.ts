@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { PlatformDAOImpl } from '../../dao/PlatformDAOImpl';
-import { PlatformService } from './platform.service';
+import { PlatformDAOImpl } from '../../dao/PlatformDAOImpl.js';
+import { PlatformService } from './platform.service.js';
 
 export default async function routes(fastify: FastifyInstance, options: any) {
   const platformDAO = new PlatformDAOImpl();

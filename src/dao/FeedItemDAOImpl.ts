@@ -1,6 +1,6 @@
-import { FeedItemDAO } from './FeedItemDAO';
-import prisma from '../utils/prisma';
-import { FeedItemDTO } from '../dto/FeedItemDTO';
+import { FeedItemDAO } from './FeedItemDAO.js';
+import prisma from '../utils/prisma.js';
+import { FeedItemDTO } from '../dto/FeedItemDTO.js';
 import { Prisma } from '@prisma/client';
 
 export class FeedItemDAOImpl implements FeedItemDAO {
