@@ -5,6 +5,7 @@ import fastifyCors from '@fastify/cors';
 import platformsRoutes from './domains/platform/platform.routes';
 import feedRoutes from './domains/feed/feed.routes';
 import followedUsersRoutes from './domains/user/user.routes';
+import { initMongoDB } from './init-mongodb';
 
 const fastify = Fastify({ logger: true });
 
@@ -24,5 +25,10 @@ const start = async () => {
     process.exit(1);
   }
 };
+
+initMongoDB().catch(err => {
+  console.error('初始化失败:', err);
+  process.exit(1);
+});
 
 start(); 

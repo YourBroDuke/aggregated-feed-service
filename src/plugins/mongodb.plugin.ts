@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
 import { FastifyInstance } from 'fastify';
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 async function mongoConnector(fastify: FastifyInstance, options: any) {
   const uri = process.env.MONGODB_URI;
