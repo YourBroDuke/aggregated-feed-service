@@ -15,7 +15,7 @@ RUN pnpm install --frozen-lockfile --reporter=default
 
 # 复制源代码
 COPY src/ ./src/
-COPY .env ./
+COPY .env.docker ./.env
 
 # 构建 TypeScript
 RUN pnpm build

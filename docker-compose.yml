@@ -2,14 +2,10 @@ services:
   agd-feed-be:
     build: .
     container_name: agd-feed-be
-    env_file:
-      - .env
     ports:
       - "3000:3000"
     depends_on:
       - mongo
-    environment:
-      - MONGODB_URI=mongodb://agduser:agdpass@mongo:27017/agd_feed?authSource=admin
   mongo:
     image: mongo:6.0
     container_name: mongo

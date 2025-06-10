@@ -7,10 +7,10 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = env("MONGODB_URI")
 }
 
-model Platform {
+model Platforms {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   icon            String
@@ -19,19 +19,18 @@ model Platform {
   domain          String
 }
 
-model FeedItem {
+model FeedItems {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
   platform    String
   author      Json
-  title       String
   content     String
-  summary     String
-  postedAt   DateTime
   originalUrl String
   stats       Json
+  postedAt   DateTime
 }
 
-model FollowedUser {
+model FollowedUsers {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   platform    String
   username    String

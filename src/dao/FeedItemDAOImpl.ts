@@ -19,7 +19,7 @@ export class FeedItemDAOImpl implements FeedItemDAO {
       pageSize = 20,
     } = params;
 
-    const where: Prisma.FeedItemWhereInput = {};
+    const where: Prisma.FeedItemsWhereInput = {};
     if (platforms && platforms.length > 0) where.platform = { in: platforms };
     if (timeRange && timeRange !== 'all') {
       const now = new Date();
@@ -35,15 +35,16 @@ export class FeedItemDAOImpl implements FeedItemDAO {
     }
 
     // 只支持按时间排序
-    const orderBy: Prisma.FeedItemOrderByWithRelationInput | undefined =
+    const orderBy: Prisma.FeedItemsOrderByWithRelationInput | undefined =
       sortBy === 'newest' ? { postedAt: 'desc' } : undefined;
 
-    const items = await prisma.feedItem.findMany({
+    const items = await prisma.feedItems.findMany({
       where,
       orderBy,
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
+    console.log(items);
     return items.map(i => ({
       id: i.id,
       platform: i.platform,

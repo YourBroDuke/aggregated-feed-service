@@ -24,8 +24,8 @@ export async function initMongoDB() {
   const db = client.db();
 
   // FeedItem 示例
-  if (!(await collectionExists(db, 'feedItems'))) {
-    const feedItems = db.collection('feedItems');
+  if (!(await collectionExists(db, 'FeedItems'))) {
+    const feedItems = db.collection('FeedItems');
     await feedItems.createIndex({ id: 1 }, { unique: true });
     await feedItems.insertOne({
       title: '示例动态',
@@ -50,8 +50,8 @@ export async function initMongoDB() {
   }
 
   // FollowedUser 示例
-  if (!(await collectionExists(db, 'followedUsers'))) {
-    const followedUsers = db.collection('followedUsers');
+  if (!(await collectionExists(db, 'FollowedUsers'))) {
+    const followedUsers = db.collection('FollowedUsers');
     await followedUsers.createIndex({ id: 1 }, { unique: true });
     await followedUsers.insertOne({
       platform: 'twitter',
@@ -69,8 +69,8 @@ export async function initMongoDB() {
   }
 
   // Platform 示例
-  if (!(await collectionExists(db, 'platforms'))) {
-    const platforms = db.collection('platforms');
+  if (!(await collectionExists(db, 'Platforms'))) {
+    const platforms = db.collection('Platforms');
     await platforms.createIndex({ id: 1 }, { unique: true });
     await platforms.insertOne({
       name: 'Twitter',

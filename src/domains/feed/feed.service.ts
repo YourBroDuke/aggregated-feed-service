@@ -15,8 +15,8 @@ export class FeedService {
     sortBy?: 'newest' | 'popular' | 'engagement';
     page?: number;
     pageSize?: number;
-  }): Prisma.FeedItemWhereInput {
-    const q: Prisma.FeedItemWhereInput = {};
+  }): Prisma.FeedItemsWhereInput {
+    const q: Prisma.FeedItemsWhereInput = {};
     if (params.platforms) {
       q.platform = { in: params.platforms };
     }

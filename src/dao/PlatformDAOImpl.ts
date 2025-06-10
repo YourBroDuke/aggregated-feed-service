@@ -4,7 +4,8 @@ import { PlatformDTO } from '../dto/PlatformDTO.js';
 
 export class PlatformDAOImpl implements PlatformDAO {
   async getPlatforms(): Promise<PlatformDTO[]> {
-    const platforms = await prisma.platform.findMany();
+    const platforms = await prisma.platforms.findMany();
+    console.log(platforms);
     return platforms.map(p => ({
       id: p.id,
       name: p.name,

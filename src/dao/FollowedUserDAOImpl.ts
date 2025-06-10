@@ -4,7 +4,8 @@ import { FollowedUserDTO } from '../dto/FollowedUserDTO.js';
 
 export class FollowedUserDAOImpl implements FollowedUserDAO {
   async getFollowedUsers(): Promise<FollowedUserDTO[]> {
-    const users = await prisma.followedUser.findMany();
+    const users = await prisma.followedUsers.findMany();
+    console.log(users);
     return users.map(u => ({
       id: u.id,
       platform: u.platform,
@@ -19,7 +20,7 @@ export class FollowedUserDAOImpl implements FollowedUserDAO {
   }
 
   async addFollowedUser(profileUrl: string): Promise<FollowedUserDTO> {
-    const user = await prisma.followedUser.create({
+    const user = await prisma.followedUsers.create({
       data: {
         profileUrl,
         platform: '',
@@ -31,6 +32,7 @@ export class FollowedUserDAOImpl implements FollowedUserDAO {
         isActive: true,
       },
     });
+    console.log(user);
     return {
       id: user.id,
       platform: user.platform,
@@ -45,7 +47,7 @@ export class FollowedUserDAOImpl implements FollowedUserDAO {
   }
 
   async removeFollowedUser(userId: string): Promise<{ success: boolean }> {
-    await prisma.followedUser.delete({ where: { id: userId } });
+    await prisma.followedUsers.delete({ where: { id: userId } });
     return { success: true };
   }
 } 
