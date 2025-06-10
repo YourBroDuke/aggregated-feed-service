@@ -5,7 +5,7 @@ import fastifyCors from '@fastify/cors';
 import platformsRoutes from './routes/platform.routes.js';
 import feedRoutes from './routes/feed.routes.js';
 import followedUsersRoutes from './routes/user.routes.js';
-import { initMongoDB } from './init-mongodb.js';
+import { connectDB, disconnectDB } from './utils/db.js';
 
 const fastify = Fastify({ logger: true });
 
@@ -19,6 +19,7 @@ fastify.register(followedUsersRoutes);
 
 const start = async () => {
   try {
+    await connectDB();
     await fastify.listen({ port: 3000, host: '0.0.0.0' });
   } catch (err) {
     fastify.log.error(err);
@@ -26,9 +27,10 @@ const start = async () => {
   }
 };
 
-await initMongoDB().catch(err => {
-  console.error('初始化失败:', err);
-  process.exit(1);
+// Handle graceful shutdown
+process.on('SIGINT', async () => {
+  await disconnectDB();
+  process.exit(0);
 });
 
 start(); 
