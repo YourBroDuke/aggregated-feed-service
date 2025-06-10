@@ -1,11 +1,10 @@
 import { FastifyInstance } from 'fastify';
-import { FeedItemDAOImpl } from '../../dao/FeedItemDAOImpl.js';
-import { FeedItemDTO } from '../../dto/FeedItemDTO.js';
-import { FeedService } from './feed.service.js';
+import { FeedItemDTO } from '../dto/FeedItemDTO.js';
+import { FeedService } from '../services/feed.service.js';
+import { FeedItemDalImpl } from '../dal/FeedItemDalImpl.js';
 
 export default async function routes(fastify: FastifyInstance, options: any) {
-  const feedItemDAO = new FeedItemDAOImpl();
-  const feedService = new FeedService(feedItemDAO);
+  const feedService = new FeedService(new FeedItemDalImpl());
 
   fastify.get('/api/feed', async (request, reply) => {
     const query = request.query as any;
@@ -13,7 +12,6 @@ export default async function routes(fastify: FastifyInstance, options: any) {
     const params = {
       platforms: query.platforms ? query.platforms.split(',') : undefined,
       timeRange: query.timeRange,
-      sortBy: query.sortBy,
       page: query.page ? parseInt(query.page) : 1,
       pageSize: query.pageSize ? parseInt(query.pageSize) : 20,
     };

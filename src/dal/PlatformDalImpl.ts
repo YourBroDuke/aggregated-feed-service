@@ -1,11 +1,10 @@
-import { PlatformDAO } from './PlatformDAO.js';
+import { IPlatformDal } from './IPlatformDal.js';
 import prisma from '../utils/prisma.js';
 import { PlatformDTO } from '../dto/PlatformDTO.js';
 
-export class PlatformDAOImpl implements PlatformDAO {
+export class PlatformDalImpl implements IPlatformDal {
   async getPlatforms(): Promise<PlatformDTO[]> {
     const platforms = await prisma.platforms.findMany();
-    console.log(platforms);
     return platforms.map(p => ({
       id: p.id,
       name: p.name,

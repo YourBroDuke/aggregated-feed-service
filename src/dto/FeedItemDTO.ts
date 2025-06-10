@@ -9,10 +9,5 @@ export interface FeedItemDTO {
   };
   content: string;
   originalUrl: string;
-  stats: {
-    likes: number;
-    comments: number;
-    shares: number;
-  };
   postedAt: Date;
 } 

@@ -1,20 +1,18 @@
-import { FeedItemDAO } from './FeedItemDAO.js';
+import { IFeedItemDal } from './IFeedItemDal.js';
 import prisma from '../utils/prisma.js';
 import { FeedItemDTO } from '../dto/FeedItemDTO.js';
 import { Prisma } from '@prisma/client';
 
-export class FeedItemDAOImpl implements FeedItemDAO {
+export class FeedItemDalImpl implements IFeedItemDal {
   async getFeedItems(params: {
     platforms?: string[];
     timeRange?: 'all' | 'today' | 'week' | 'month';
-    sortBy?: 'newest' | 'popular' | 'engagement';
     page?: number;
     pageSize?: number;
   }): Promise<FeedItemDTO[]> {
     const {
       platforms,
       timeRange,
-      sortBy = 'newest',
       page = 1,
       pageSize = 20,
     } = params;
@@ -36,7 +34,7 @@ export class FeedItemDAOImpl implements FeedItemDAO {
 
     // 只支持按时间排序
     const orderBy: Prisma.FeedItemsOrderByWithRelationInput | undefined =
-      sortBy === 'newest' ? { postedAt: 'desc' } : undefined;
+      { postedAt: 'desc' };
 
     const items = await prisma.feedItems.findMany({
       where,
@@ -44,7 +42,6 @@ export class FeedItemDAOImpl implements FeedItemDAO {
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
-    console.log(items);
     return items.map(i => ({
       id: i.id,
       platform: i.platform,
@@ -56,12 +53,7 @@ export class FeedItemDAOImpl implements FeedItemDAO {
       },
       content: i.content,
       originalUrl: i.originalUrl,
-      stats: {
-        likes: (i.stats as any)?.likes || 0,
-        comments: (i.stats as any)?.comments || 0,
-        shares: (i.stats as any)?.shares || 0,
-      },
       postedAt: i.postedAt,
     }));
   }
-} 
+}

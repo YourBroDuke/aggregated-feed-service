@@ -1,11 +1,10 @@
-import { FollowedUserDAO } from './FollowedUserDAO.js';
+import { IFollowedUserDal } from './IFollowedUserDal.js';
 import prisma from '../utils/prisma.js';
 import { FollowedUserDTO } from '../dto/FollowedUserDTO.js';
 
-export class FollowedUserDAOImpl implements FollowedUserDAO {
+export class FollowedUserDalImpl implements IFollowedUserDal {
   async getFollowedUsers(): Promise<FollowedUserDTO[]> {
     const users = await prisma.followedUsers.findMany();
-    console.log(users);
     return users.map(u => ({
       id: u.id,
       platform: u.platform,
@@ -15,7 +14,6 @@ export class FollowedUserDAOImpl implements FollowedUserDAO {
       description: u.description,
       profileUrl: u.profileUrl,
       followedAt: u.followedAt,
-      isActive: u.isActive,
     }));
   }
 
@@ -29,10 +27,8 @@ export class FollowedUserDAOImpl implements FollowedUserDAO {
         avatar: '',
         description: '',
         followedAt: new Date(),
-        isActive: true,
       },
     });
-    console.log(user);
     return {
       id: user.id,
       platform: user.platform,
@@ -42,7 +38,6 @@ export class FollowedUserDAOImpl implements FollowedUserDAO {
       description: user.description,
       profileUrl: user.profileUrl,
       followedAt: user.followedAt,
-      isActive: user.isActive,
     };
   }
 

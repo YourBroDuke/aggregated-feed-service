@@ -2,9 +2,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 import Fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
-import platformsRoutes from './domains/platform/platform.routes.js';
-import feedRoutes from './domains/feed/feed.routes.js';
-import followedUsersRoutes from './domains/user/user.routes.js';
+import platformsRoutes from './routes/platform.routes.js';
+import feedRoutes from './routes/feed.routes.js';
+import followedUsersRoutes from './routes/user.routes.js';
 import { initMongoDB } from './init-mongodb.js';
 
 const fastify = Fastify({ logger: true });

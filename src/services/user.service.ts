@@ -1,15 +1,15 @@
-import { FollowedUserDAO } from '../../dao/FollowedUserDAO.js';
-import { FollowedUserDTO } from '../../dto/FollowedUserDTO.js';
+import { IFollowedUserDal } from '../dal/IFollowedUserDal.js';
+import { FollowedUserDTO } from '../dto/FollowedUserDTO.js';
 
 export class UserService {
-  private followedUserDAO: FollowedUserDAO;
+  private followedUserDal: IFollowedUserDal;
 
-  constructor(followedUserDAO: FollowedUserDAO) {
-    this.followedUserDAO = followedUserDAO;
+  constructor(followedUserDal: IFollowedUserDal) {
+    this.followedUserDal = followedUserDal;
   }
 
   async getFollowedUsers(): Promise<FollowedUserDTO[]> {
-    const users = await this.followedUserDAO.getFollowedUsers();
+    const users = await this.followedUserDal.getFollowedUsers();
     return users.map((u: FollowedUserDTO) => ({
       id: u.id,
       platform: u.platform,
@@ -19,12 +19,11 @@ export class UserService {
       description: u.description,
       profileUrl: u.profileUrl,
       followedAt: u.followedAt,
-      isActive: u.isActive,
     }));
   }
 
   async addFollowedUser(profileUrl: string): Promise<FollowedUserDTO> {
-    const result = await this.followedUserDAO.addFollowedUser(profileUrl);
+    const result = await this.followedUserDal.addFollowedUser(profileUrl);
     if (!result) throw new Error('Failed to add followed user');
     return {
       id: result.id,
@@ -35,12 +34,11 @@ export class UserService {
       description: result.description,
       profileUrl: result.profileUrl,
       followedAt: result.followedAt,
-      isActive: result.isActive,
     };
   }
 
   async removeFollowedUser(userId: string): Promise<{ success: boolean }> {
-    const result = await this.followedUserDAO.removeFollowedUser(userId);
+    const result = await this.followedUserDal.removeFollowedUser(userId);
     return { success: result.success };
   }
 } 

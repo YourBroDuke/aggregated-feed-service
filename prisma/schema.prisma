@@ -26,7 +26,6 @@ model FeedItems {
   author      Json
   content     String
   originalUrl String
-  stats       Json
   postedAt   DateTime
 }
 
@@ -39,5 +38,4 @@ model FollowedUsers {
   description String
   profileUrl  String
   followedAt  DateTime
-  isActive    Boolean
 }

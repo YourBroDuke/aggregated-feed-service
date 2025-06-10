@@ -61,7 +61,6 @@ export async function initMongoDB() {
       description: '前端开发者',
       profileUrl: 'https://twitter.com/zhangsan',
       followedAt: new Date(),
-      isActive: true,
     });
     console.log('已创建 followedUsers 集合并插入示例数据');
   } else {

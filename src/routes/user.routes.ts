@@ -1,12 +1,13 @@
 import { FastifyInstance } from 'fastify';
-import { FollowedUserDAOImpl } from '../../dao/FollowedUserDAOImpl.js';
+import { FollowedUserDalImpl } from '../dal/FollowedUserDalImpl.js';
+import { UserService } from '../services/user.service.js';
 
 export default async function routes(fastify: FastifyInstance, options: any) {
-  const followedUserDAO = new FollowedUserDAOImpl();
+  const userService = new UserService(new FollowedUserDalImpl());
 
   // 获取关注用户列表
   fastify.get('/api/followed-users', async (request, reply) => {
-    const followedUsers = await followedUserDAO.getFollowedUsers();
+    const followedUsers = await userService.getFollowedUsers();
     return followedUsers;
   });
 
@@ -14,14 +15,14 @@ export default async function routes(fastify: FastifyInstance, options: any) {
   fastify.post('/api/followed-users', async (request, reply) => {
     const { profileUrl } = request.body as { profileUrl: string };
     if (!profileUrl) return reply.code(400).send({ error: 'profileUrl required' });
-    const followedUser = await followedUserDAO.addFollowedUser(profileUrl);
+    const followedUser = await userService.addFollowedUser(profileUrl);
     return followedUser;
   });
 
   // 取消关注用户
   fastify.delete('/api/followed-users/:userId', async (request, reply) => {
     const { userId } = request.params as { userId: string };
-    const result = await followedUserDAO.removeFollowedUser(userId);
+    const result = await userService.removeFollowedUser(userId);
     return result;
   });
 } 

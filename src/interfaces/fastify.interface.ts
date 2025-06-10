@@ -1,8 +1,8 @@
-import 'fastify';
-import { Db } from 'mongodb';
+import 'fastify'
+import { Db } from 'mongodb'
 
 declare module 'fastify' {
   interface FastifyInstance {
-    mongo: Db;
+    mongo: Db
   }
-} 
+}

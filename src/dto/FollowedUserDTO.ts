@@ -7,5 +7,4 @@ export interface FollowedUserDTO {
   description: string;
   profileUrl: string;
   followedAt: Date;
-  isActive: boolean;
 } 
