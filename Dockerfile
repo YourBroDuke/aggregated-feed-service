@@ -32,4 +32,4 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/.env ./
 
 # 启动服务
-CMD ["node", "dist/server.js"] 
+CMD ["node", "dist/server.js"]
