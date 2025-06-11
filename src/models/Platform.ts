@@ -2,6 +2,7 @@ import mongoose, { Document } from 'mongoose';
 
 interface IPlatform extends Document {
   name: string;
+  type: string;
   icon: string;
   color: string;
   backgroundColor: string;
@@ -10,6 +11,7 @@ interface IPlatform extends Document {
 
 const platformSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  type: { type: String, required: true },
   icon: { type: String, required: true },
   color: { type: String, required: true },
   backgroundColor: { type: String, required: true },

@@ -5,7 +5,7 @@ import fastifyCors from '@fastify/cors';
 import platformsRoutes from './routes/platform.routes.js';
 import feedRoutes from './routes/feed.routes.js';
 import followedUsersRoutes from './routes/user.routes.js';
-import { connectDB, disconnectDB } from './utils/db.js';
+import { connectDB, disconnectDB, initPlatforms } from './utils/db.js';
 
 const fastify = Fastify({ logger: true });
 
@@ -20,6 +20,7 @@ fastify.register(followedUsersRoutes);
 const start = async () => {
   try {
     await connectDB();
+    await initPlatforms();
     await fastify.listen({ port: 3000, host: '0.0.0.0' });
   } catch (err) {
     fastify.log.error(err);

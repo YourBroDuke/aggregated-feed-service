@@ -8,6 +8,7 @@ export class PlatformDalImpl implements IPlatformDal {
     return platforms.map((p: any) => ({
       id: p._id.toString(),
       name: p.name,
+      type: p.type,
       icon: p.icon,
       color: p.color,
       backgroundColor: p.backgroundColor,

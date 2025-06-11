@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Platform } from '../models/Platform';
 
 export async function connectDB() {
   const uri = process.env.MONGODB_URI;
@@ -24,3 +25,16 @@ export async function disconnectDB() {
     process.exit(1);
   }
 } 
+
+export async function initPlatforms() {
+  const platformTypes = await Platform.find().select('type');
+  const newPlatforms = [
+    { name: '知乎', type: 'zhihu', icon: '/images/zhihu-icon.png', color: '#0084ff', backgroundColor: '#e6f4ff', domain: 'zhihu.com' },
+    { name: '小红书', type: 'xiaohongshu', icon: '/images/xiaohongshu-icon.png', color: '#ff2442', backgroundColor: '#ffebee', domain: 'xiaohongshu.com' },
+    { name: '哔哩哔哩', type: 'bilibili', icon: '/images/bilibili-icon.png', color: '#00a1d6', backgroundColor: '#e3f2fd', domain: 'bilibili.com' },
+    { name: 'Twitter', type: 'twitter', icon: '/images/twitter-icon.jpg', color: '#1da1f2', backgroundColor: '#e3f2fd', domain: 'twitter.com' },
+    { name: 'YouTube', type: 'youtube', icon: '/images/youtube-icon.png', color: '#ff0000', backgroundColor: '#ffebee', domain: 'youtube.com' },
+  ];
+  const platformsToInsert = newPlatforms.filter((p) => !platformTypes.some((pt) => pt.type === p.type));
+  await Platform.insertMany(platformsToInsert);
+}
