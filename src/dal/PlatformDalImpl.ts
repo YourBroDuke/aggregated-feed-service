@@ -1,12 +1,11 @@
 import { IPlatformDal } from './IPlatformDal.js';
 import { PlatformDTO } from '../dto/PlatformDTO.js';
-import { Platform } from '../models/Platform.js';
+import { Platform, IPlatform } from '../models/Platform.js';
 
 export class PlatformDalImpl implements IPlatformDal {
   async getPlatforms(): Promise<PlatformDTO[]> {
     const platforms = await Platform.find();
-    return platforms.map((p: any) => ({
-      id: p._id.toString(),
+    return platforms.map((p: IPlatform) => ({
       name: p.name,
       type: p.type,
       icon: p.icon,

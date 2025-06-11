@@ -6,6 +6,11 @@ import platformsRoutes from './routes/platform.routes.js';
 import feedRoutes from './routes/feed.routes.js';
 import followedUsersRoutes from './routes/user.routes.js';
 import { connectDB, disconnectDB, initPlatforms } from './utils/db.js';
+import { CrawlerService } from './services/CrawlerService.js';
+import { SyncService } from './services/SyncService.js';
+import { ProfileUpdateJob } from './jobs/ProfileUpdateJob.js';
+import { FeedSyncJob } from './jobs/FeedSyncJob.js';
+import { CronJobManager } from './jobs/CronJobManager.js';
 
 const fastify = Fastify({ logger: true });
 
@@ -21,6 +26,19 @@ const start = async () => {
   try {
     await connectDB();
     await initPlatforms();
+
+    // Initialize services
+    const crawlerService = new CrawlerService();
+    const syncService = new SyncService(crawlerService);
+
+    // Initialize jobs
+    const profileUpdateJob = new ProfileUpdateJob(syncService);
+    const feedSyncJob = new FeedSyncJob(syncService);
+
+    // Initialize and start cron job manager
+    const cronJobManager = new CronJobManager(profileUpdateJob, feedSyncJob);
+    cronJobManager.start();
+
     await fastify.listen({ port: 3000, host: '0.0.0.0' });
   } catch (err) {
     fastify.log.error(err);

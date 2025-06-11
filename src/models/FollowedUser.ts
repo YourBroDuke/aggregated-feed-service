@@ -1,23 +1,33 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-interface IFollowedUser extends Document {
+export interface IFollowedUser extends Document {
+  _id: mongoose.Types.ObjectId;
   platform: string;
-  username: string;
-  name: string;
-  avatar: string;
-  description: string;
   profileUrl: string;
+  name?: string;
+  username?: string;
+  avatar?: string;
   followedAt: Date;
+  lastSyncAt?: Date;
+  syncStatus?: 'pending' | 'success' | 'failed';
 }
 
-const followedUserSchema = new mongoose.Schema({
-  platform: { type: String, required: true},
-  username: { type: String, required: false, default: '' },
-  name: { type: String, required: false, default: '' },
-  avatar: { type: String, required: false, default: '' },
-  description: { type: String, required: false, default: '' },
-  profileUrl: { type: String, required: true, unique: true },
-  followedAt: { type: Date, required: true }
-}, { timestamps: true });
+const FollowedUserSchema = new Schema<IFollowedUser>({
+  _id: { type: Schema.Types.ObjectId, required: true, default: () => new mongoose.Types.ObjectId() },
+  platform: { type: String, required: true },
+  profileUrl: { type: String, required: true },
+  name: { type: String },
+  username: { type: String },
+  avatar: { type: String },
+  followedAt: { type: Date, required: true },
+  lastSyncAt: { type: Date },
+  syncStatus: { 
+    type: String, 
+    enum: ['pending', 'success', 'failed'],
+    default: 'pending'
+  }
+}, {
+  timestamps: true
+});
 
-export const FollowedUser = mongoose.model<IFollowedUser>('FollowedUser', followedUserSchema); 
+export const FollowedUser = mongoose.model<IFollowedUser>('FollowedUser', FollowedUserSchema); 

@@ -9,7 +9,6 @@ export class PlatformService {
   }
 
   async getPlatforms(): Promise<PlatformDTO[]> {
-    const platforms = await this.platformDal.getPlatforms();
-    return platforms;
+    return await this.platformDal.getPlatforms();
   }
 } 

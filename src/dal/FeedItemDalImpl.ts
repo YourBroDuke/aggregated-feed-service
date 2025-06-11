@@ -1,6 +1,6 @@
 import { IFeedItemDal } from './IFeedItemDal.js';
 import { FeedItemDTO } from '../dto/FeedItemDTO.js';
-import { FeedItem } from '../models/FeedItem.js';
+import { FeedItem, IFeedItem } from '../models/FeedItem.js';
 
 export class FeedItemDalImpl implements IFeedItemDal {
   async getFeedItems(params: {
@@ -40,7 +40,7 @@ export class FeedItemDalImpl implements IFeedItemDal {
       .skip((page - 1) * pageSize)
       .limit(pageSize);
 
-    return items.map((i: any) => ({
+    return items.map((i: IFeedItem) => ({
       id: i._id.toString(),
       platform: i.platform,
       title: i.title || '',

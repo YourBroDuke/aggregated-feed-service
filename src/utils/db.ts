@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Platform } from '../models/Platform';
+import { Platform } from '../models/Platform.js';
 
 export async function connectDB() {
   const uri = process.env.MONGODB_URI;

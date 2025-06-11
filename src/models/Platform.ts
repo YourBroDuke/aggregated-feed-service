@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 
-interface IPlatform extends Document {
+export interface IPlatform extends Document {
   name: string;
   type: string;
   icon: string;

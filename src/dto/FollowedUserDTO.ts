@@ -4,7 +4,6 @@ export interface FollowedUserDTO {
   username: string;
   name: string;
   avatar: string;
-  description: string;
   profileUrl: string;
   followedAt: Date;
 } 

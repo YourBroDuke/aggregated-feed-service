@@ -1,18 +1,16 @@
 import { IFollowedUserDal } from './IFollowedUserDal.js';
 import { FollowedUserDTO } from '../dto/FollowedUserDTO.js';
-import { FollowedUser } from '../models/FollowedUser.js';
-import { Document } from 'mongoose';
+import { FollowedUser, IFollowedUser } from '../models/FollowedUser.js';
 
 export class FollowedUserDalImpl implements IFollowedUserDal {
   async getFollowedUsers(): Promise<FollowedUserDTO[]> {
     const users = await FollowedUser.find();
-    return users.map((u: any) => ({
+    return users.map((u: IFollowedUser) => ({
       id: u._id.toString(),
       platform: u.platform,
-      username: u.username,
-      name: u.name,
-      avatar: u.avatar,
-      description: u.description,
+      username: u.username || '',
+      name: u.name || '',
+      avatar: u.avatar || '',
       profileUrl: u.profileUrl,
       followedAt: u.followedAt,
     }));
@@ -24,59 +22,37 @@ export class FollowedUserDalImpl implements IFollowedUserDal {
     // Check if user already exists
     const existingUser = await FollowedUser.findOne({ profileUrl });
     if (existingUser) {
-      const user = existingUser as Document & {
-        _id: { toString(): string };
-        platform: string;
-        username: string;
-        name: string;
-        avatar: string;
-        description: string;
-        profileUrl: string;
-        followedAt: Date;
-      };
+      const user = existingUser as IFollowedUser;
       
       return {
         id: user._id.toString(),
         platform: user.platform,
-        username: user.username,
-        name: user.name,
-        avatar: user.avatar,
-        description: user.description,
+        username: user.username || '',
+        name: user.name || '',
+        avatar: user.avatar || '',
         profileUrl: user.profileUrl,
         followedAt: user.followedAt,
       };
     }
 
     const user = await FollowedUser.create({
-      profileUrl,
       platform,
       username: '',
       name: '',
       avatar: '',
-      description: '',
+      profileUrl,
       followedAt: new Date(),
-    });
-    console.log(user);
-    const user2 = user as Document & {
-      _id: { toString(): string };
-      platform: string;
-      username: string;
-      name: string;
-      avatar: string;
-      description: string;
-      profileUrl: string;
-      followedAt: Date;
-    };
+    }) as IFollowedUser;
+    
     
     return {
-      id: user2._id.toString(),
-      platform: user2.platform,
-      username: user2.username,
-      name: user2.name,
-      avatar: user2.avatar,
-      description: user2.description,
-      profileUrl: user2.profileUrl,
-      followedAt: user2.followedAt,
+      id: user._id.toString(),
+      platform: user.platform,
+      username: user.username || '',
+      name: user.name || '',
+      avatar: user.avatar || '',
+      profileUrl: user.profileUrl,
+      followedAt: user.followedAt,
     };
   }
 
