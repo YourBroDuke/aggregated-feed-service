@@ -8,7 +8,7 @@ export interface IFollowedUser extends Document {
   username?: string;
   avatar?: string;
   followedAt: Date;
-  lastSyncAt?: Date;
+  syncCursor?: string;
   syncStatus?: 'pending' | 'success' | 'failed';
 }
 
@@ -20,7 +20,7 @@ const FollowedUserSchema = new Schema<IFollowedUser>({
   username: { type: String },
   avatar: { type: String },
   followedAt: { type: Date, required: true },
-  lastSyncAt: { type: Date },
+  syncCursor: { type: String },
   syncStatus: { 
     type: String, 
     enum: ['pending', 'success', 'failed'],

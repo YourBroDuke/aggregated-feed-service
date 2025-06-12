@@ -16,7 +16,6 @@ export class SyncService {
 
     user.name = profile.name;
     user.avatar = profile.avatar;
-    user.lastSyncAt = new Date();
     user.syncStatus = 'success';
 
     await user.save();
@@ -29,7 +28,7 @@ export class SyncService {
     }
 
     const crawler = this.crawlerService.getCrawler(user.platform);
-    const posts = await crawler.fetchLatestPosts(user.profileUrl, user.lastSyncAt || new Date(0));
+    const { posts, cursor } = await crawler.fetchLatestPosts(user.profileUrl, user.syncCursor || "");
 
     for (const post of posts) {
       await FeedItem.findOneAndUpdate(
@@ -43,7 +42,7 @@ export class SyncService {
       );
     }
 
-    user.lastSyncAt = new Date();
+    user.syncCursor = cursor;
     await user.save();
   }
 

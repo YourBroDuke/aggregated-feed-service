@@ -73,15 +73,14 @@ export class XiaohongshuCrawler implements ICrawler {
     }
   }
 
-  async fetchLatestPosts(profileUrl: string, since: Date): Promise<Post[]> {
+  async fetchLatestPosts(profileUrl: string, cursor: string): Promise<{ posts: Post[], cursor: string }> {
     const userId = this.extractUserId(profileUrl);
     const posts: Post[] = [];
-    let cursor = '';
     let hasMore = true;
 
     while (hasMore) {
       try {
-        const api = `/api/sns/web/v1/user_posted?num=30&cursor=${cursor}&user_id=${userId}&image_formats=jpg,webp,avif`;
+        const api = `/api/sns/web/v1/user_posted?num=30&cursor=&user_id=${userId}&image_formats=jpg,webp,avif`;
         const response = await this.makeRequest(api);
         
         if (!response.success) {
@@ -91,11 +90,6 @@ export class XiaohongshuCrawler implements ICrawler {
         const notes = response.data.notes || [];
         for (const note of notes) {
           const postDate = new Date(note.time * 1000);
-          if (postDate < since) {
-            hasMore = false;
-            break;
-          }
-
           posts.push({
             businessId: `xhs-${note.id}`,
             title: note.title || '',
@@ -116,6 +110,6 @@ export class XiaohongshuCrawler implements ICrawler {
       }
     }
 
-    return posts;
+    return { posts, cursor };
   }
 } 

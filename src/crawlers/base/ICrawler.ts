@@ -19,6 +19,6 @@ export interface ICrawler {
   // Feed item related methods
   fetchLatestPosts(
     profileUrl: string, 
-    since: Date
-  ): Promise<Post[]>;
+    cursor: string
+  ): Promise<{ posts: Post[], cursor: string }>;
 } 

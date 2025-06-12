@@ -115,8 +115,8 @@ export function generateRequestParams(cookies: string, api: string, data: any = 
   headers['x-t'] = xt;
   headers['x-s-common'] = xs_common;
   
-  // Convert data to JSON string if it's an object
-  const processedData = typeof data === 'object' ? JSON.stringify(data) : data;
+  // Convert data to JSON string if it's an object, similar to Python's json.dumps
+  const processedData = typeof data === 'object' ? JSON.stringify(data, null, 0) : data;
   
   return { headers, cookies: parsedCookies, data: processedData };
 } 
