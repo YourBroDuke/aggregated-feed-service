@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "ts-node --esm src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@fastify/cors": "^10.1.0",
@@ -20,7 +22,10 @@
     "node-cron": "^4.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.15.30",
+    "jest": "^30.0.0",
+    "ts-jest": "^29.4.0",
     "ts-node": "^10.0.0",
     "typescript": "^5.0.0"
   }

@@ -47,8 +47,10 @@ export class XiaohongshuCrawler implements ICrawler {
 
   private extractUserId(profileUrl: string): string {
     const parsedUrl = parse(profileUrl, true);
-    const pathParts = parsedUrl.pathname?.split('/') || [];
-    return pathParts[pathParts.length - 1].split('?')[0];
+    const pathParts = (parsedUrl.pathname?.split('/') || []).filter(Boolean);
+    if (pathParts.length === 0) return '';
+    const last = pathParts[pathParts.length - 1];
+    return last === 'profile' ? '' : last.split('?')[0];
   }
 
   async fetchUserProfile(profileUrl: string): Promise<UserProfile> {
