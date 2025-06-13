@@ -6,112 +6,69 @@ import * as vm from 'vm';
 // Load the JavaScript files from local directory
 const xhsXsXscPath = path.resolve(__dirname, './utils/xhs_xs_xsc_56.js');
 const xhsXrayPath = path.resolve(__dirname, './utils/xhs_xray.js');
-const xhsXrayPack1Path = path.resolve(__dirname, './utils/xhs_xray_pack1.js');
-const xhsXrayPack2Path = path.resolve(__dirname, './utils/xhs_xray_pack2.js');
 
 let xhsXsXscJs: string;
 let xhsXrayJs: string;
-let xhsXrayPack1Js: string;
-let xhsXrayPack2Js: string;
 
 try {
   xhsXsXscJs = fs.readFileSync(xhsXsXscPath, 'utf-8');
   xhsXrayJs = fs.readFileSync(xhsXrayPath, 'utf-8');
-  xhsXrayPack1Js = fs.readFileSync(xhsXrayPack1Path, 'utf-8');
-  xhsXrayPack2Js = fs.readFileSync(xhsXrayPack2Path, 'utf-8');
 } catch (error) {
   console.error('Failed to load JavaScript files:', error);
   throw error;
 }
 
-// Create browser-like global objects
-const browserGlobals = {
-  window: {
-    navigator: {
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-      language: 'zh-CN',
-      languages: ['zh-CN', 'zh', 'en'],
-      platform: 'Win32',
-      vendor: 'Google Inc.',
-    },
-    location: {
-      href: 'https://www.xiaohongshu.com',
-      origin: 'https://www.xiaohongshu.com',
-      protocol: 'https:',
-      host: 'www.xiaohongshu.com',
-      hostname: 'www.xiaohongshu.com',
-      pathname: '/',
-      search: '',
-      hash: '',
-    },
-    document: {
-      cookie: '',
-      referrer: 'https://www.xiaohongshu.com',
-    },
-    localStorage: new Map(),
-    sessionStorage: new Map(),
-    performance: {
-      now: () => Date.now(),
-      timeOrigin: Date.now(),
-    },
-    Date: Date,
-    Math: Math,
-    JSON: JSON,
-    console: {
-      log: (...args: any[]) => console.log(...args),
-      error: (...args: any[]) => console.error(...args),
-      warn: (...args: any[]) => console.warn(...args),
-      info: (...args: any[]) => console.info(...args),
-    },
-  },
-  navigator: {
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-    language: 'zh-CN',
-    languages: ['zh-CN', 'zh', 'en'],
-    platform: 'Win32',
-    vendor: 'Google Inc.',
-  },
-  document: {
-    cookie: '',
-    referrer: 'https://www.xiaohongshu.com',
-  },
-  location: {
-    href: 'https://www.xiaohongshu.com',
-    origin: 'https://www.xiaohongshu.com',
-    protocol: 'https:',
-    host: 'www.xiaohongshu.com',
-    hostname: 'www.xiaohongshu.com',
-    pathname: '/',
-    search: '',
-    hash: '',
-  },
-  localStorage: new Map(),
-  sessionStorage: new Map(),
-  performance: {
-    now: () => Date.now(),
-    timeOrigin: Date.now(),
-  },
-};
-
 // Create a function to execute code in the VM context
 async function executeInVMContext(code: string, functionName: string, ...args: any[]): Promise<any> {
   try {
-    // Create a custom require function that returns the appropriate module
-    const customRequire = (modulePath: string) => {
-      if (modulePath === './xhs_xray_pack1.js') {
-        return xhsXrayPack1Js;
-      }
-      if (modulePath === './xhs_xray_pack2.js') {
-        return xhsXrayPack2Js;
-      }
-      throw new Error(`Module not found: ${modulePath}`);
-    };
-
     const context = vm.createContext({
-      ...browserGlobals,
-      global: browserGlobals,
-      window: browserGlobals.window,
-      require: customRequire,
+      global: {},
+      self: {},
+      window: {},
+      Math: Math,
+      Date: Date,
+      console: console,
+      JSON: JSON,
+      setTimeout: setTimeout,
+      clearTimeout: clearTimeout,
+      setInterval: setInterval,
+      clearInterval: clearInterval,
+      Buffer: Buffer,
+      process: process,
+      Error: Error,
+      RegExp: RegExp,
+      String: String,
+      Number: Number,
+      Boolean: Boolean,
+      Array: Array,
+      Object: Object,
+      Function: Function,
+      parseInt: parseInt,
+      parseFloat: parseFloat,
+      isNaN: isNaN,
+      isFinite: isFinite,
+      decodeURI: decodeURI,
+      decodeURIComponent: decodeURIComponent,
+      encodeURI: encodeURI,
+      encodeURIComponent: encodeURIComponent,
+      escape: escape,
+      unescape: unescape,
+      eval: eval,
+      Infinity: Infinity,
+      NaN: NaN,
+      undefined: undefined,
+      require: (moduleName: string) => {
+        const modulePath = path.resolve(__dirname, './utils', moduleName);
+        const moduleContent = fs.readFileSync(modulePath, 'utf-8');
+        const moduleContext = vm.createContext({
+          ...context,
+          module: { exports: {} },
+          exports: {},
+          require: context.require
+        });
+        vm.runInContext(moduleContent, moduleContext);
+        return moduleContext.module.exports;
+      }
     });
 
     // First run the main code
