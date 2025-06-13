@@ -1,7 +1,7 @@
 import { parse } from 'url';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as vm from 'vm';
+import { JSDOM } from 'jsdom';
 
 // Load the JavaScript files from local directory
 const xhsXsXscPath = path.resolve(__dirname, './utils/xhs_xs_xsc_56.js');
@@ -18,69 +18,45 @@ try {
   throw error;
 }
 
-// Create a function to execute code in the VM context
+// Create a function to execute code in the JSDOM context
 async function executeInVMContext(code: string, functionName: string, ...args: any[]): Promise<any> {
+  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
+    url: 'https://www.xiaohongshu.com',
+    referrer: 'https://www.xiaohongshu.com',
+    contentType: 'text/html',
+    includeNodeLocations: true,
+    runScripts: 'dangerously',
+    resources: 'usable',
+    pretendToBeVisual: true,
+  });
+
+  const window = dom.window;
+  const document = window.document;
+
+  // 1. Polyfill global, require, process, Buffer
+  const polyfillScript = document.createElement('script');
+  polyfillScript.textContent = `
+    window.global = window;
+    window.process = { env: {} };
+    window.Buffer = undefined;
+    window.require = function() { throw new Error('require is not supported'); };
+  `;
+  document.body.appendChild(polyfillScript);
+
+  // 2. Inject the code (the actual JS file)
+  const codeScript = document.createElement('script');
+  codeScript.textContent = code;
+  document.body.appendChild(codeScript);
+
   try {
-    const context = vm.createContext({
-      global: {},
-      self: {},
-      window: {},
-      Math: Math,
-      Date: Date,
-      console: console,
-      JSON: JSON,
-      setTimeout: setTimeout,
-      clearTimeout: clearTimeout,
-      setInterval: setInterval,
-      clearInterval: clearInterval,
-      Buffer: Buffer,
-      process: process,
-      Error: Error,
-      RegExp: RegExp,
-      String: String,
-      Number: Number,
-      Boolean: Boolean,
-      Array: Array,
-      Object: Object,
-      Function: Function,
-      parseInt: parseInt,
-      parseFloat: parseFloat,
-      isNaN: isNaN,
-      isFinite: isFinite,
-      decodeURI: decodeURI,
-      decodeURIComponent: decodeURIComponent,
-      encodeURI: encodeURI,
-      encodeURIComponent: encodeURIComponent,
-      escape: escape,
-      unescape: unescape,
-      eval: eval,
-      Infinity: Infinity,
-      NaN: NaN,
-      undefined: undefined,
-      require: (moduleName: string) => {
-        const modulePath = path.resolve(__dirname, './utils', moduleName);
-        const moduleContent = fs.readFileSync(modulePath, 'utf-8');
-        const moduleContext = vm.createContext({
-          ...context,
-          module: { exports: {} },
-          exports: {},
-          require: context.require
-        });
-        vm.runInContext(moduleContent, moduleContext);
-        return moduleContext.module.exports;
-      }
-    });
-
-    // First run the main code
-    const script = new vm.Script(code);
-    script.runInContext(context, { timeout: 5000 });
-
-    // Then run the function
-    const result = vm.runInContext(`${functionName}(${args.map(arg => JSON.stringify(arg)).join(',')})`, context, { timeout: 5000 });
+    // 3. Call the function
+    const result = await window[functionName](...args);
     return result;
   } catch (error) {
     console.error(`Error executing ${functionName}:`, error);
     throw error;
+  } finally {
+    dom.window.close();
   }
 }
 
