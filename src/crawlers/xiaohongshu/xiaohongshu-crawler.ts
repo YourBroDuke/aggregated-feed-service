@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ICrawler, UserProfile, Post } from '../base/ICrawler';
 import { parse } from 'url';
-import { generateRequestParams } from './utils';
+import { generateRequestParams } from './sign';
 
 export class XiaohongshuCrawler implements ICrawler {
   private baseUrl = 'https://edith.xiaohongshu.com';
@@ -13,7 +13,7 @@ export class XiaohongshuCrawler implements ICrawler {
 
   private async makeRequest(api: string, method: 'GET' | 'POST' = 'GET', data?: any) {
     try {
-      const { headers, cookies, data: processedData } = generateRequestParams(this.cookies, api, data);
+      const { headers, cookies, data: processedData } = await generateRequestParams(this.cookies, api, data);
       
       // Add cookies to headers
       headers['Cookie'] = Object.entries(cookies)

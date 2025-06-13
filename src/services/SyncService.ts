@@ -15,8 +15,8 @@ export class SyncService {
     const profile = await crawler.fetchUserProfile(user.profileUrl);
 
     user.name = profile.name;
+    user.username = profile.username;
     user.avatar = profile.avatar;
-    user.syncStatus = 'success';
 
     await user.save();
   }

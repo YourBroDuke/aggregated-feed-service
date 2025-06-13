@@ -37,9 +37,6 @@ export class FollowedUserDalImpl implements IFollowedUserDal {
 
     const user = await FollowedUser.create({
       platform,
-      username: '',
-      name: '',
-      avatar: '',
       profileUrl,
       followedAt: new Date(),
     }) as IFollowedUser;

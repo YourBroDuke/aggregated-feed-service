@@ -23,8 +23,7 @@ const FollowedUserSchema = new Schema<IFollowedUser>({
   syncCursor: { type: String },
   syncStatus: { 
     type: String, 
-    enum: ['pending', 'success', 'failed'],
-    default: 'pending'
+    enum: ['pending', 'success', 'failed']
   }
 }, {
   timestamps: true

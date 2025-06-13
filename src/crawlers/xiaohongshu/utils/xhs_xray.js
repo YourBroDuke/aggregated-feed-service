@@ -417,26 +417,10 @@ var zc666;
     zc666 = f;
 }();
 //# sourceMappingURL=https://picasso-private-1251524319.cos.ap-shanghai.myqcloud.com/data/formula-static/formula/xhs-pc-web/runtime-main.8718828.js.map
-try {
-    require('./xhs_xray_pack1.js');
-} catch (e) {
-    try {
-        require('../static/xhs_xray_pack1.js');
-    } catch (e) {
-        require('./static/xhs_xray_pack1.js');
-    }
-}
-try {
-    require('./xhs_xray_pack2.js');
-} catch (e) {
-    try {
-        require('../static/xhs_xray_pack2.js');
-    } catch (e) {
-        require('./static/xhs_xray_pack2.js');
-    }
-}
+require('./xhs_xray_pack1.js');
+require('./xhs_xray_pack2.js');
 var n = zc666(36497)
-          , o = zc666(609)
+        , o = zc666(609)
           , i = zc666(2030);
 var a = zc666(81422)
           , u = zc666(49600);

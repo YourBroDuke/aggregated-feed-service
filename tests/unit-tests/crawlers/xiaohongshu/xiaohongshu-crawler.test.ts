@@ -1,4 +1,4 @@
-import { XiaohongshuCrawler } from '../../../src/crawlers/xiaohongshu/XiaohongshuCrawler';
+import { XiaohongshuCrawler } from '../../../../src/crawlers/xiaohongshu/xiaohongshu-crawler';
 
 describe('XiaohongshuCrawler', () => {
   let crawler: XiaohongshuCrawler;
