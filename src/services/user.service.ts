@@ -1,5 +1,8 @@
 import { IFollowedUserDal } from '../dal/IFollowedUserDal.js';
 import { FollowedUserDTO } from '../dto/FollowedUserDTO.js';
+import { CrawlerService } from './CrawlerService.js';
+import { SyncService } from './SyncService.js';
+import mongoose from 'mongoose';
 
 export class UserService {
   private followedUserDal: IFollowedUserDal;
@@ -13,7 +16,21 @@ export class UserService {
   }
 
   async addFollowedUser(profileUrl: string): Promise<FollowedUserDTO> {
-    return await this.followedUserDal.addFollowedUser(profileUrl);
+    let userId: string | undefined;
+    try {
+      const followedUser = await this.followedUserDal.addFollowedUser(profileUrl);
+      userId = followedUser.id;
+      return followedUser;
+    } finally {
+      if (userId) {
+        const syncService = new SyncService(CrawlerService.getInstance());
+        // Fire and forget the sync operation
+        syncService.syncUserProfile(new mongoose.Types.ObjectId(userId))
+          .catch(error => {
+            console.error('Failed to sync user profile:', error);
+          });
+      }
+    }
   }
 
   async removeFollowedUser(userId: string): Promise<{ success: boolean }> {

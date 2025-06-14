@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ICrawler, UserProfile, Post } from '../base/ICrawler';
 import { parse } from 'url';
-import { generateRequestParams } from './sign';
+import { generateRequestParams } from './sign.js';
 
 export class XiaohongshuCrawler implements ICrawler {
   private baseUrl = 'https://edith.xiaohongshu.com';
@@ -63,11 +63,11 @@ export class XiaohongshuCrawler implements ICrawler {
         throw new Error(response.msg || 'Failed to fetch user profile');
       }
 
-      const userData = response.data;
+      const userData = response.data.basic_info;
       return {
-        name: userData.nickname || '',
-        username: userData.red_id || '',
-        avatar: userData.avatar || '',
+        name: userData.nickname || undefined,
+        username: userData.red_id || undefined,
+        avatar: userData.images || undefined,
       };
     } catch (error) {
       console.error('Failed to fetch user profile:', error);

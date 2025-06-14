@@ -12,8 +12,8 @@ export class CronJobManager {
   }
 
   start(): void {
-    // Run profile update job every 3 minutes
-    cron.schedule('*/3 * * * *', async () => {
+    // Run profile update job every day at 00:00
+    cron.schedule('0 0 * * *', async () => {
       try {
         await this.profileUpdateJob.run();
       } catch (error) {
@@ -21,8 +21,8 @@ export class CronJobManager {
       }
     });
 
-    // Run feed sync job every 3 minutes
-    cron.schedule('*/3 * * * *', async () => {
+    // Run feed sync job every day at 00:00
+    cron.schedule('0 0 * * *', async () => {
       try {
         await this.feedSyncJob.run();
       } catch (error) {

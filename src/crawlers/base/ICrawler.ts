@@ -1,7 +1,7 @@
 export interface UserProfile {
-  name: string;
-  username: string;
-  avatar: string;
+  name?: string;
+  username?: string;
+  avatar?: string;
 }
 
 export interface Post {

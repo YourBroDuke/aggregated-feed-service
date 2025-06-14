@@ -1,114 +1,126 @@
-import { parse } from 'url';
-import * as fs from 'fs';
-import * as path from 'path';
-import { JSDOM } from 'jsdom';
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-// Load the JavaScript files from local directory
-const xhsXsXscPath = path.resolve(__dirname, './utils/xhs_xs_xsc_56.js');
-const xhsXrayPath = path.resolve(__dirname, './utils/xhs_xray.js');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-let xhsXsXscJs: string;
-let xhsXrayJs: string;
-
-try {
-  xhsXsXscJs = fs.readFileSync(xhsXsXscPath, 'utf-8');
-  xhsXrayJs = fs.readFileSync(xhsXrayPath, 'utf-8');
-} catch (error) {
-  console.error('Failed to load JavaScript files:', error);
-  throw error;
+interface RequestParams {
+  headers: Record<string, string>;
+  cookies: Record<string, string>;
+  data?: string;
 }
 
-// Create a function to execute code in the JSDOM context
-async function executeInVMContext(code: string, functionName: string, ...args: any[]): Promise<any> {
-  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
-    url: 'https://www.xiaohongshu.com',
-    referrer: 'https://www.xiaohongshu.com',
-    contentType: 'text/html',
-    includeNodeLocations: true,
-    runScripts: 'dangerously',
-    resources: 'usable',
-    pretendToBeVisual: true,
-  });
-
-  const window = dom.window;
-  const document = window.document;
-
-  // 1. Polyfill global, require, process, Buffer
-  const polyfillScript = document.createElement('script');
-  polyfillScript.textContent = `
-    window.global = window;
-    window.process = { env: {} };
-    window.Buffer = undefined;
-    window.require = function() { throw new Error('require is not supported'); };
-  `;
-  document.body.appendChild(polyfillScript);
-
-  // 2. Inject the code (the actual JS file)
-  const codeScript = document.createElement('script');
-  codeScript.textContent = code;
-  document.body.appendChild(codeScript);
-
-  try {
-    // 3. Call the function
-    const result = await window[functionName](...args);
-    return result;
-  } catch (error) {
-    console.error(`Error executing ${functionName}:`, error);
-    throw error;
-  } finally {
-    dom.window.close();
-  }
+interface XsXsCommonResult {
+  xs: string;
+  xt: string;
+  xs_common: string;
 }
 
-export function generateXb3TraceId(length: number = 16): string {
+interface XsResult {
+  xs: string;
+  xt: string;
+}
+
+function generateXB3TraceId(length: number = 16): string {
   const chars = 'abcdef0123456789';
-  let traceId = '';
+  let result = '';
   for (let i = 0; i < length; i++) {
-    traceId += chars[Math.floor(Math.random() * 16)];
+    result += chars[Math.floor(Math.random() * 16)];
   }
-  return traceId;
+  return result;
 }
 
-export async function generateXrayTraceId(): Promise<string> {
-  try {
-    const result = await executeInVMContext(xhsXrayJs, 'traceId');
-    return result;
-  } catch (error) {
-    console.error('Failed to generate xray trace ID:', error);
-    // Fallback to a simple implementation
-    return `xray-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
-  }
-}
-
-export function getRequestHeadersTemplate(): Record<string, string> {
+function getCommonHeaders(): Record<string, string> {
   return {
-    'authority': 'edith.xiaohongshu.com',
-    'accept': 'application/json, text/plain, */*',
-    'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
-    'cache-control': 'no-cache',
-    'content-type': 'application/json;charset=UTF-8',
-    'origin': 'https://www.xiaohongshu.com',
-    'pragma': 'no-cache',
-    'referer': 'https://www.xiaohongshu.com/',
-    'sec-ch-ua': '"Not A(Brand";v="99", "Microsoft Edge";v="121", "Chromium";v="121"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-site',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-    'x-b3-traceid': '',
-    'x-mns': 'unload',
-    'x-s': '',
-    'x-s-common': '',
-    'x-t': '',
-    'x-xray-traceid': ''
+    "authority": "www.xiaohongshu.com",
+    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "accept-language": "zh-CN,zh;q=0.9",
+    "cache-control": "no-cache",
+    "pragma": "no-cache",
+    "referer": "https://www.xiaohongshu.com/",
+    "sec-ch-ua": "\"Chromium\";v=\"122\", \"Not(A:Brand\";v=\"24\", \"Google Chrome\";v=\"122\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "document",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "same-origin",
+    "sec-fetch-user": "?1",
+    "upgrade-insecure-requests": "1",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
   };
 }
 
-export function parseCookies(cookieStr: string): Record<string, string> {
+function getRequestHeadersTemplate(): Record<string, string> {
+  return {
+    "authority": "edith.xiaohongshu.com",
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+    "cache-control": "no-cache",
+    "content-type": "application/json;charset=UTF-8",
+    "origin": "https://www.xiaohongshu.com",
+    "pragma": "no-cache",
+    "referer": "https://www.xiaohongshu.com/",
+    "sec-ch-ua": "\"Not A(Brand\";v=\"99\", \"Microsoft Edge\";v=\"121\", \"Chromium\";v=\"121\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-site",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0",
+    "x-b3-traceid": "",
+    "x-mns": "unload",
+    "x-s": "",
+    "x-s-common": "",
+    "x-t": "",
+    "x-xray-traceid": ""
+  };
+}
+
+async function callPythonBridge(functionName: string, ...args: string[]): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const bridgePath = path.join(__dirname, 'scripts', 'bridge.py');
+    const pythonProcess = spawn('python3', [bridgePath, functionName, ...args]);
+    
+    let output = '';
+    let error = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+      output += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      error += data.toString();
+    });
+
+    pythonProcess.on('close', (code) => {
+      if (code === 0) {
+        resolve(output.trim());
+      } else {
+        reject(new Error(`Python bridge failed: ${error}`));
+      }
+    });
+  });
+}
+
+async function generateXsXsCommon(a1: string, api: string, data: string = ''): Promise<XsXsCommonResult> {
+  const result = await callPythonBridge('generate_xs_xs_common', a1, api, data);
+  return JSON.parse(result);
+}
+
+async function generateXs(a1: string, api: string, data: string = ''): Promise<XsResult> {
+  const result = await callPythonBridge('generate_xs', a1, api, data);
+  return JSON.parse(result);
+}
+
+async function generateXrayTraceId(): Promise<string> {
+  return callPythonBridge('generate_xray_traceid');
+}
+
+function transCookies(cookiesStr: string): Record<string, string> {
   const cookies: Record<string, string> = {};
-  cookieStr.split(';').forEach(cookie => {
+  cookiesStr.split(';').forEach(cookie => {
     const [key, value] = cookie.trim().split('=');
     if (key && value) {
       cookies[key] = value;
@@ -117,47 +129,28 @@ export function parseCookies(cookieStr: string): Record<string, string> {
   return cookies;
 }
 
-export async function generateXsXsCommon(a1: string, api: string, data: string = ''): Promise<{ xs: string; xt: string; xs_common: string }> {
-  try {
-    const result = await executeInVMContext(
-      xhsXsXscJs,
-      'get_request_headers_params',
-      api,
-      data,
-      a1
-    );
-    return {
-      xs: result.xs,
-      xt: result.xt,
-      xs_common: result.xs_common
-    };
-  } catch (error) {
-    console.error('Failed to generate X-s, X-t, and X-s-common:', error);
-    throw error;
+export async function generateRequestParams(cookiesStr: string, api: string, data: string = ''): Promise<RequestParams> {
+  const cookies = transCookies(cookiesStr);
+  const a1 = cookies['a1'];
+  
+  if (!a1) {
+    throw new Error('Missing a1 cookie');
   }
-}
 
-export async function generateRequestParams(cookies: string, api: string, data: any = ''): Promise<{
-  headers: Record<string, string>;
-  cookies: Record<string, string>;
-  data: string;
-}> {
-  const parsedCookies = parseCookies(cookies);
-  const a1 = parsedCookies['a1'] || '';
-  
-  // Generate headers
+  const { xs, xt, xs_common } = await generateXsXsCommon(a1, api, data);
+  const x_b3_traceid = generateXB3TraceId();
+  const x_xray_traceid = await generateXrayTraceId();
+
   const headers = getRequestHeadersTemplate();
-  headers['x-b3-traceid'] = generateXb3TraceId();
-  headers['x-xray-traceid'] = await generateXrayTraceId();
-  
-  // Generate X-s, X-t, and X-s-common using the actual JavaScript implementation
-  const { xs, xt, xs_common } = await generateXsXsCommon(a1, api, typeof data === 'object' ? JSON.stringify(data) : data);
   headers['x-s'] = xs;
-  headers['x-t'] = xt;
+  headers['x-t'] = xt.toString();
   headers['x-s-common'] = xs_common;
-  
-  // Convert data to JSON string if it's an object
-  const processedData = typeof data === 'object' ? JSON.stringify(data, null, 0) : data;
-  
-  return { headers, cookies: parsedCookies, data: processedData };
-} 
+  headers['x-b3-traceid'] = x_b3_traceid;
+  headers['x-xray-traceid'] = x_xray_traceid;
+
+  return {
+    headers,
+    cookies,
+    data: data ? JSON.stringify(data) : undefined
+  };
+}
