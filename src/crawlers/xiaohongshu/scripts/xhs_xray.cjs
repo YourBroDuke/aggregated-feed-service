@@ -417,8 +417,8 @@ var zc666;
     zc666 = f;
 }();
 //# sourceMappingURL=https://picasso-private-1251524319.cos.ap-shanghai.myqcloud.com/data/formula-static/formula/xhs-pc-web/runtime-main.8718828.js.map
-require('./xhs_xray_pack1.js');
-require('./xhs_xray_pack2.js');
+require('./xhs_xray_pack1.cjs');
+require('./xhs_xray_pack2.cjs');
 var n = zc666(36497)
         , o = zc666(609)
           , i = zc666(2030);

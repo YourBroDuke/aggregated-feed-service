@@ -12,19 +12,19 @@ os.chdir(current_dir)
 
 # Load the JavaScript files
 try:
-    with open(os.path.join(current_dir, 'xhs_xs_xsc_56.js'), 'r', encoding='utf-8') as f:
+    with open(os.path.join(current_dir, 'xhs_xs_xsc_56.cjs'), 'r', encoding='utf-8') as f:
         js_code = f.read()
     js = execjs.compile(js_code)
 except Exception as e:
-    print(f"Error loading xhs_xs_xsc_56.js: {str(e)}", file=sys.stderr)
+    print(f"Error loading xhs_xs_xsc_56.cjs: {str(e)}", file=sys.stderr)
     sys.exit(1)
 
 try:
-    with open(os.path.join(current_dir, 'xhs_xray.js'), 'r', encoding='utf-8') as f:
+    with open(os.path.join(current_dir, 'xhs_xray.cjs'), 'r', encoding='utf-8') as f:
         xray_js_code = f.read()
     xray_js = execjs.compile(xray_js_code)
 except Exception as e:
-    print(f"Error loading xhs_xray.js: {str(e)}", file=sys.stderr)
+    print(f"Error loading xhs_xray.cjs: {str(e)}", file=sys.stderr)
     sys.exit(1)
 
 def generate_xs_xs_common(a1, api, data=''):
