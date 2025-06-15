@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrawler, UserProfile, Post } from '../base/ICrawler';
+import { ICrawler, UserProfile, Post } from '../base/ICrawler.js';
 import { parse } from 'url';
 import { generateRequestParams } from './sign.js';
 
