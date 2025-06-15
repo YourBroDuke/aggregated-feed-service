@@ -79,10 +79,11 @@ export class XiaohongshuCrawler implements ICrawler {
     const userId = this.extractUserId(profileUrl);
     const posts: Post[] = [];
     let hasMore = true;
+    let start_cursor = "";
 
     while (hasMore) {
       try {
-        const api = `/api/sns/web/v1/user_posted?num=30&cursor=&user_id=${userId}&image_formats=jpg,webp,avif`;
+        const api = `/api/sns/web/v1/user_posted?num=30&cursor=${start_cursor}&user_id=${userId}&image_formats=jpg,webp,avif`;
         const response = await this.makeRequest(api);
         
         if (!response.success) {
@@ -91,21 +92,29 @@ export class XiaohongshuCrawler implements ICrawler {
 
         const notes = response.data.notes || [];
         for (const note of notes) {
-          const postDate = new Date(note.time * 1000);
+          if (note.note_id == cursor) {
+            hasMore = false;
+            break;
+          }
+
+          // there is no time in the note, so we need to mock the date by now
+          const postDate = new Date();
           posts.push({
-            businessId: `xhs-${note.id}`,
-            title: note.title || '',
-            content: note.desc || '',
-            originalUrl: `https://www.xiaohongshu.com/explore/${note.id}`,
+            businessId: `xhs-${note.note_id}`,
+            title: note.display_title || '',
+            content: '',
+            originalUrl: `https://www.xiaohongshu.com/explore/${note.note_id}`,
             postedAt: postDate,
           });
         }
 
-        if (!response.data.has_more || !response.data.cursor) {
-          hasMore = false;
-        } else {
-          cursor = response.data.cursor;
+        // if the cursor is empty, it means we only fetch the first page
+        if (cursor == "")
+        {
+          break;
         }
+
+        start_cursor = response.data.cursor;
       } catch (error) {
         console.error('Failed to fetch posts:', error);
         throw error;
