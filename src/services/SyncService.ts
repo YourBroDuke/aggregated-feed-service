@@ -35,7 +35,12 @@ export class SyncService {
         { businessId: post.businessId },
         {
           ...post,
-          userId: user._id,
+          author: {
+            userId: user._id,
+            name: user.name,
+            avatar: user.avatar,
+            username: user.username
+          },
           platform: user.platform
         },
         { upsert: true, new: true }
