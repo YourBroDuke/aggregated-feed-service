@@ -12,22 +12,10 @@ export class CronJobManager {
   }
 
   start(): void {
-    // Run profile update job every day at 00:00
+    // Run profile update job and feed sync job every day at 00:00
     cron.schedule('0 0 * * *', async () => {
-      try {
-        await this.profileUpdateJob.run();
-      } catch (error) {
-        console.error('Profile update job failed:', error);
-      }
-    });
-
-    // Run feed sync job every day at 00:00
-    cron.schedule('0 0 * * *', async () => {
-      try {
-        await this.feedSyncJob.run();
-      } catch (error) {
-        console.error('Feed sync job failed:', error);
-      }
+      await this.profileUpdateJob.run().catch((error) => console.error('Profile update job failed:', error));
+      await this.feedSyncJob.run().catch((error) => console.error('Feed sync job failed:', error));
     });
 
     console.log('Cron jobs started');

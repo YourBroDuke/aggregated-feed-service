@@ -5,6 +5,10 @@ import mongoose from 'mongoose';
 export class SyncService {
   constructor(private crawlerService: CrawlerService) {}
 
+  async syncCookie() {
+    this.crawlerService.syncCookies();
+  }
+
   async syncUserProfile(userId: mongoose.Types.ObjectId): Promise<void> {
     const user = await FollowedUser.findById(userId);
     if (!user) {
@@ -19,6 +23,10 @@ export class SyncService {
     user.avatar = profile.avatar;
 
     await user.save();
+
+    await FeedItem.updateMany({ 'author.userId': user._id }, { 'author.name': user.name, 'author.avatar': user.avatar, 'author.username': user.username }).catch((error) => {
+      console.error(`Failed to update feed items for user ${user._id}:`, error);
+    }); 
   }
 
   async syncUserFeeds(userId: mongoose.Types.ObjectId): Promise<void> {

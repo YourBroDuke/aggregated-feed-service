@@ -18,6 +18,12 @@ export class CrawlerService {
   registerCrawler(platform: string, crawler: ICrawler): void {
     this.crawlers.set(platform, crawler);
   }
+
+  syncCookies(): void {
+    this.crawlers.forEach((crawler) => {
+      crawler.syncCookie();
+    });
+  }
   
   getCrawler(platform: string): ICrawler {
     const crawler = this.crawlers.get(platform);

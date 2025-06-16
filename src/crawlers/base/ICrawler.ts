@@ -13,6 +13,9 @@ export interface Post {
 }
 
 export interface ICrawler {
+  // Cookie related methods
+  syncCookie(): void;
+
   // User profile related methods
   fetchUserProfile(profileUrl: string): Promise<UserProfile>;
   

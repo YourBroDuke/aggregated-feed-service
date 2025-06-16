@@ -29,6 +29,10 @@ export class UserService {
           .catch(error => {
             console.error('Failed to sync user profile:', error);
           });
+        syncService.syncUserFeeds(new mongoose.Types.ObjectId(userId))
+          .catch(error => {
+            console.error('Failed to sync user feeds:', error);
+          });
       }
     }
   }

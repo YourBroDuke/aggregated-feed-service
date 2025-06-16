@@ -38,4 +38,12 @@ describe('XiaohongshuCrawler', () => {
       expect(userId).toBe('');
     });
   });
+
+  describe('extractApiPathAndQuery', () => {
+    it('should extract API path and query from standard profile URL', () => {
+      const profileUrl = 'https://www.xiaohongshu.com/user/profile/123456789?xsec_token=ABGr3a7Fvra-zuhDlOlg4OW-sBDVzXLBxyWwpkXsdbHyY%3D';
+      const apiPathAndQuery = crawler['extractApiPathAndQuery'](profileUrl);
+      expect(apiPathAndQuery).toBe('/user/profile/123456789?xsec_token=ABGr3a7Fvra-zuhDlOlg4OW-sBDVzXLBxyWwpkXsdbHyY%3D');
+    });
+  });
 });

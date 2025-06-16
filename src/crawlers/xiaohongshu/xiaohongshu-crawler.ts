@@ -4,14 +4,19 @@ import { parse } from 'url';
 import { generateRequestParams } from './sign.js';
 
 export class XiaohongshuCrawler implements ICrawler {
-  private baseUrl = 'https://edith.xiaohongshu.com';
+  private backEndUrl = 'https://edith.xiaohongshu.com';
   private cookies: string;
 
   constructor(cookies: string) {
     this.cookies = cookies;
   }
 
-  private async makeRequest(api: string, method: 'GET' | 'POST' = 'GET', data?: any) {
+  public syncCookie(): void {
+    // TODO: implement the logic to sync the cookie
+    this.cookies = "";
+  }
+
+  private async makeRequest(url: string = this.backEndUrl, api: string, method: 'GET' | 'POST' = 'GET', data?: any) {
     try {
       const { headers, cookies, data: processedData } = await generateRequestParams(this.cookies, api, data);
       
@@ -26,8 +31,8 @@ export class XiaohongshuCrawler implements ICrawler {
       };
 
       const response = method === 'GET' 
-        ? await axios.get(`${this.baseUrl}${api}`, config)
-        : await axios.post(`${this.baseUrl}${api}`, processedData, config);
+        ? await axios.get(`${url}${api}`, config)
+        : await axios.post(`${url}${api}`, processedData, config);
       
       return response.data;
     } catch (error) {
@@ -53,12 +58,16 @@ export class XiaohongshuCrawler implements ICrawler {
     return last === 'profile' ? '' : last.split('?')[0];
   }
 
+  private extractApiPathAndQuery(profileUrl: string): string {
+    const parsedUrl = parse(profileUrl, true);
+    return parsedUrl.pathname + (parsedUrl.search || '');
+  }
+
   async fetchUserProfile(profileUrl: string): Promise<UserProfile> {
-    const userId = this.extractUserId(profileUrl);
-    const api = `/api/sns/web/v1/user/otherinfo?target_user_id=${userId}`;
+    const api = this.extractApiPathAndQuery(profileUrl);
     
     try {
-      const response = await this.makeRequest(api);
+      const response = await this.makeRequest(this.backEndUrl, api);
       if (!response.success) {
         throw new Error(response.msg || 'Failed to fetch user profile');
       }
@@ -84,7 +93,7 @@ export class XiaohongshuCrawler implements ICrawler {
     while (hasMore) {
       try {
         const api = `/api/sns/web/v1/user_posted?num=30&cursor=${start_cursor}&user_id=${userId}&image_formats=jpg,webp,avif`;
-        const response = await this.makeRequest(api);
+        const response = await this.makeRequest(this.backEndUrl, api);
         
         if (!response.success) {
           throw new Error(response.msg || 'Failed to fetch posts');
@@ -103,7 +112,7 @@ export class XiaohongshuCrawler implements ICrawler {
             businessId: `xhs-${note.note_id}`,
             title: note.display_title || '',
             content: '',
-            originalUrl: `https://www.xiaohongshu.com/explore/${note.note_id}`,
+            originalUrl: `https://www.xiaohongshu.com/explore/${note.note_id}?xsec_token=${note.xsec_token}`,
             postedAt: postDate,
           });
         }
