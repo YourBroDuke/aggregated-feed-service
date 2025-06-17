@@ -1,6 +1,9 @@
-import { IPlatformDal } from './IPlatformDal.js';
 import { PlatformDTO } from '../dto/PlatformDTO.js';
 import { Platform, IPlatform } from '../models/Platform.js';
+
+export interface IPlatformDal {
+  getPlatforms(): Promise<PlatformDTO[]>;
+}
 
 export class PlatformDalImpl implements IPlatformDal {
   async getPlatforms(): Promise<PlatformDTO[]> {
@@ -14,4 +17,4 @@ export class PlatformDalImpl implements IPlatformDal {
       domain: p.domain,
     }));
   }
-} 
+}

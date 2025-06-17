@@ -1,4 +1,4 @@
-import { CrawlerService } from './CrawlerService.js';
+import { CrawlerService } from './crawler.service.js';
 import { FollowedUser } from '../models/FollowedUser.js';
 import { FeedItem } from '../models/FeedItem.js';
 import mongoose from 'mongoose';

@@ -1,6 +1,6 @@
 import cron from 'node-cron';
-import { ProfileUpdateJob } from './ProfileUpdateJob.js';
-import { FeedSyncJob } from './FeedSyncJob.js';
+import { ProfileUpdateJob } from './profile-update-job.js';
+import { FeedSyncJob } from './feed-sync-job.js';
 
 export class CronJobManager {
   private profileUpdateJob: ProfileUpdateJob;

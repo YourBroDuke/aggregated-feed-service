@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { FollowedUserDalImpl } from '../dal/FollowedUserDalImpl.js';
+import { FollowedUserDalImpl } from '../dal/followed-user-dal.js';
 import { UserService } from '../services/user.service.js';
 
 export default async function routes(fastify: FastifyInstance, options: any) {

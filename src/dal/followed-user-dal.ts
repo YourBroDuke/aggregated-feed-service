@@ -1,6 +1,11 @@
-import { IFollowedUserDal } from './IFollowedUserDal.js';
 import { FollowedUserDTO } from '../dto/FollowedUserDTO.js';
 import { FollowedUser, IFollowedUser } from '../models/FollowedUser.js';
+
+export interface IFollowedUserDal {
+  getFollowedUsers(): Promise<FollowedUserDTO[]>;
+  addFollowedUser(profileUrl: string): Promise<FollowedUserDTO>;
+  removeFollowedUser(userId: string): Promise<{ success: boolean; }>;
+}
 
 export class FollowedUserDalImpl implements IFollowedUserDal {
   async getFollowedUsers(): Promise<FollowedUserDTO[]> {
@@ -64,4 +69,4 @@ export class FollowedUserDalImpl implements IFollowedUserDal {
     await FollowedUser.findByIdAndDelete(userId);
     return { success: true };
   }
-} 
+}

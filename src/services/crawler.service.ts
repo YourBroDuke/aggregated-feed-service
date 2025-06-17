@@ -1,4 +1,4 @@
-import { ICrawler } from '../crawlers/base/ICrawler.js';
+import { ICrawler } from '../crawlers/base/crawler.js';
 
 export class CrawlerService {
   private static instance: CrawlerService;

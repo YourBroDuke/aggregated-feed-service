@@ -1,4 +1,4 @@
-import { SyncService } from '../services/SyncService.js';
+import { SyncService } from '../services/sync.service.js';
 
 export class ProfileUpdateJob {
   constructor(private syncService: SyncService) {}

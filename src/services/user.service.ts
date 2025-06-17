@@ -1,7 +1,7 @@
-import { IFollowedUserDal } from '../dal/IFollowedUserDal.js';
+import { IFollowedUserDal } from '../dal/followed-user-dal.js';
 import { FollowedUserDTO } from '../dto/FollowedUserDTO.js';
-import { CrawlerService } from './CrawlerService.js';
-import { SyncService } from './SyncService.js';
+import { CrawlerService } from './crawler.service.js';
+import { SyncService } from './sync.service.js';
 import mongoose from 'mongoose';
 
 export class UserService {

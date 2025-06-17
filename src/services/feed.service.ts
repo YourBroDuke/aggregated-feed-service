@@ -1,4 +1,4 @@
-import { IFeedItemDal } from '../dal/IFeedItemDal.js';
+import { IFeedItemDal } from '../dal/feed-item-dal.js';
 import { FeedItemDTO } from '../dto/FeedItemDTO.js';
 
 export class FeedService {

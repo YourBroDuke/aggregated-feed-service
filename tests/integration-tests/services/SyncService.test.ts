@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { connectDB, disconnectDB } from '../../../src/utils/db.js';
-import { SyncService } from '../../../src/services/SyncService.js';
-import { CrawlerService } from '../../../src/services/CrawlerService.js';
+import { SyncService } from '../../../src/services/sync.service.js';
+import { CrawlerService } from '../../../src/services/crawler.service.js';
 import { FollowedUser } from '../../../src/models/FollowedUser.js';
 import { XiaohongshuCrawler } from '../../../src/crawlers/xiaohongshu/xiaohongshu-crawler.js';
 import { FeedItem, IFeedItem } from '../../../src/models/FeedItem.js';

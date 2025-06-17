@@ -1,4 +1,4 @@
-import { IPlatformDal } from '../dal/IPlatformDal.js';
+import { IPlatformDal } from '../dal/platform-dal.js';
 import { PlatformDTO } from '../dto/PlatformDTO.js';
 
 export class PlatformService {

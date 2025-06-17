@@ -6,11 +6,11 @@ import platformsRoutes from './routes/platform.routes.js';
 import feedRoutes from './routes/feed.routes.js';
 import followedUsersRoutes from './routes/user.routes.js';
 import { connectDB, disconnectDB, initPlatforms } from './utils/db.js';
-import { CrawlerService } from './services/CrawlerService.js';
-import { SyncService } from './services/SyncService.js';
-import { ProfileUpdateJob } from './jobs/ProfileUpdateJob.js';
-import { FeedSyncJob } from './jobs/FeedSyncJob.js';
-import { CronJobManager } from './jobs/CronJobManager.js';
+import { CrawlerService } from './services/crawler.service.js';
+import { SyncService } from './services/sync.service.js';
+import { ProfileUpdateJob } from './jobs/profile-update-job.js';
+import { FeedSyncJob } from './jobs/feed-sync-job.js';
+import { CronJobManager } from './jobs/cron-job-manager.js';
 import { XiaohongshuCrawler } from './crawlers/xiaohongshu/xiaohongshu-crawler.js';
 
 const fastify = Fastify({ logger: true });

@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { PlatformService } from '../services/platform.service.js';
-import { PlatformDalImpl } from '../dal/PlatformDalImpl.js';
+import { PlatformDalImpl } from '../dal/platform-dal.js';
 
 export default async function routes(fastify: FastifyInstance, options: any) {
   const platformService = new PlatformService(new PlatformDalImpl());

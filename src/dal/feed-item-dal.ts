@@ -1,4 +1,3 @@
-import { IFeedItemDal } from './IFeedItemDal.js';
 import { FeedItemDTO } from '../dto/FeedItemDTO.js';
 import { FeedItem, IFeedItem } from '../models/FeedItem.js';
 
@@ -54,4 +53,13 @@ export class FeedItemDalImpl implements IFeedItemDal {
       postedAt: i.postedAt,
     }));
   }
+}
+
+export interface IFeedItemDal {
+  getFeedItems(params: {
+    platforms?: string[];
+    timeRange?: 'all' | 'today' | 'week' | 'month';
+    page?: number;
+    pageSize?: number;
+  }): Promise<FeedItemDTO[]>;
 }

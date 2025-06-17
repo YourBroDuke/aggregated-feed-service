@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { FeedItemDTO } from '../dto/FeedItemDTO.js';
 import { FeedService } from '../services/feed.service.js';
-import { FeedItemDalImpl } from '../dal/FeedItemDalImpl.js';
+import { FeedItemDalImpl } from '../dal/feed-item-dal.js';
 
 export default async function routes(fastify: FastifyInstance, options: any) {
   const feedService = new FeedService(new FeedItemDalImpl());
