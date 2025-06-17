@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "ts-node --esm src/server.ts",
+    "dev": "NODE_OPTIONS='--loader ts-node/esm' ts-node src/server.ts",
     "build": "tsc && cp -r src/crawlers/xiaohongshu/scripts dist/crawlers/xiaohongshu/",
     "start": "node dist/server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
