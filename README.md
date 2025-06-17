@@ -1,53 +1,83 @@
-# 聚合信息流后端 API (Fastify + MongoDB)
+# Aggregated Feed Service
 
-## 简介
-本项目为多平台内容聚合与关注管理的后端API，基于 Fastify 框架和 MongoDB 数据库实现。API 仅提供数据读取与关注用户管理，数据写入/更新由外部进程负责。
+A backend service that aggregates and manages content from multiple platforms. This service provides APIs for content retrieval and user following management, while data ingestion is handled by external processes.
 
-## 主要技术
-- Fastify (Node.js Web 框架)
-- MongoDB (单一数据源)
+## Local Development
 
-## 环境配置与启动指南
- rque
+### Prerequisites
+- Node.js 18+
+- pnpm
+- MongoDB
 
- 
-### 1. 克隆项目
+### Setup
 
+1. Clone the repository:
 ```bash
-git clone <你的仓库地址>
+git clone <repository-url>
 cd aggregated-feed-service
 ```
 
-### 2. 安装依赖
-
-请确保你已安装 [pnpm](https://pnpm.io/zh/installation) 和 Node.js (建议版本 18+)。
-
+2. Install dependencies:
 ```bash
-pnpm install --reporter=default
+pnpm install
 ```
 
-### 3. 配置环境变量
+3. Configure environment:
+```bash
+cp .env.example .env
+```
+Edit `.env` to set your MongoDB connection string:
+```
+DATABASE_URL=mongodb://localhost:27017/aggregated-feed
+```
 
-1. 复制 `.env.example` 文件为 `.env`（如无 `.env.example`，请直接新建 `.env` 文件）：
-   ```bash
-   cp .env.example .env
-   ```
-2. 编辑 `.env` 文件，设置你的 MongoDB 连接字符串，例如：
-   ```
-   DATABSE_URL=mongodb://localhost:27017/aggregated-feed
-   ```
-
-### 4. 启动开发服务器
-
+4. Start development server:
 ```bash
 pnpm run dev
 ```
 
-服务器启动后，默认监听端口请参考 `.env` 或 `src/config` 配置。
+## Testing
 
-## API 说明
-详见 [API_SPEC.md](./API_SPEC.md)
+Run the test suite:
+```bash
+pnpm test
+```
 
-## 说明
-- 本项目不包含数据采集/写入逻辑，仅提供 API 查询与关注用户管理。
-- 单用户模式，无需登录认证。 
+For watch mode during development:
+```bash
+pnpm test:watch
+```
+
+## Docker Deployment
+
+### Using Docker Compose (Recommended)
+
+1. Build and start the services:
+```bash
+docker-compose up --build
+```
+
+2. For development with hot-reload:
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+```
+
+### Manual Docker Build
+
+1. Build the image:
+```bash
+docker build -t aggregated-feed-service .
+```
+
+2. Run the container:
+```bash
+docker run -p 3000:3000 --env-file .env.docker aggregated-feed-service
+```
+
+## API Documentation
+
+For detailed API specifications, please refer to [API_SPEC.md](./API_SPEC.md).
+
+## Notes
+- This service is designed for single-user mode and does not include authentication.
+- Data ingestion/writing is handled by external processes, not through this API. 
