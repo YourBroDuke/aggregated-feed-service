@@ -13,7 +13,7 @@ A backend service that aggregates and manages content from multiple platforms. T
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone git@github.com:YourBroDuke/aggregated-feed-service.git
 cd aggregated-feed-service
 ```
 
@@ -28,7 +28,7 @@ cp .env.example .env
 ```
 Edit `.env` to set your MongoDB connection string:
 ```
-DATABASE_URL=mongodb://localhost:27017/aggregated-feed
+MONGODB_URL=mongodb://localhost:27017/aggregated-feed
 ```
 
 4. Start development server:
