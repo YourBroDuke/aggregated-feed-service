@@ -57,11 +57,6 @@ pnpm test:watch
 docker-compose up --build
 ```
 
-2. For development with hot-reload:
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
-```
-
 ### Manual Docker Build
 
 1. Build the image:
